@@ -11,6 +11,6 @@ public class Problem {
 
     private int number;
     private String name;
-    private String topic;
+    private Topic topic;
     private String solution;
 }

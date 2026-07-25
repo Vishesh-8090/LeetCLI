@@ -5,7 +5,7 @@ package com.vishesh.leetcli.util;
  * into valid Java file names.
  *
  * Example:
- * House Robber -> HouseRobber.java
+ * House Robber -> HouseRobber
  */
 public final class NameFormatter {
 
@@ -17,17 +17,15 @@ public final class NameFormatter {
      * @param problemName the original LeetCode problem name
      * @return the formatted Java file name
      */
-    public static String toJavaFileName(String problemName){
+    public static String toClassName(String problemName){
         String[] s = problemName.trim().split("\\s+");
+
         StringBuilder fileName = new StringBuilder();
 
         for (String str : s) {
-            char ch = str.charAt(0);
-            ch = Character.toUpperCase(ch);
-            str = ch + str.substring(1);
-            fileName.append(str);
+            fileName.append(Character.toUpperCase(str.charAt(0)))
+                    .append(str.substring(1));
         }
-        fileName.append(".java");
 
         return fileName.toString();
     }

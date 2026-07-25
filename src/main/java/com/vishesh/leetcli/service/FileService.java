@@ -25,11 +25,12 @@ public class FileService {
      * @param problem the problem to persist
      */
     public void createSolutionFile(Problem problem) throws IOException {
-        String fileName = NameFormatter.toJavaFileName(problem.getName());
+        String folderName =
+                problem.getNumber() + "_" + NameFormatter.toClassName(problem.getName());
 
-        Path filePath = Paths.get("LeetCode", problem.getTopic(), fileName);
+        Path filePath = Paths.get("LeetCode", problem.getTopic().toString(), folderName, "Solution.java");
         Path directory = filePath.getParent();
-        Path directories = Files.createDirectories(directory);
+        Files.createDirectories(directory);
 
         Files.writeString(filePath, problem.getSolution());
 
