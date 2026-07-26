@@ -2,14 +2,8 @@ package com.vishesh.leetcli.service;
 
 import com.vishesh.leetcli.model.Problem;
 import com.vishesh.leetcli.util.NameFormatter;
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
-
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.*;
-import java.util.function.Function;
 
 /**
  * Service responsible for creating directories
@@ -18,9 +12,11 @@ import java.util.function.Function;
 public class FileService {
 
     private final ConfigService configService;
+    private final ReadmeGenerator readmeGenerator;
 
-    public FileService(ConfigService configService){
+    public FileService(ConfigService configService, ReadmeGenerator readmeGenerator){
         this.configService = configService;
+        this.readmeGenerator = readmeGenerator;
     }
 
     /**
@@ -28,7 +24,7 @@ public class FileService {
      *
      * @param problem the problem to persist
      */
-    public void createSolutionFile(Problem problem) throws IOException {
+    public void createSolutionFile(Problem problem) {
         String folderName =
                 problem.getNumber() + "_" + NameFormatter.toClassName(problem.getName());
 
@@ -36,10 +32,24 @@ public class FileService {
 
         Path filePath = Paths.get(repoPath, problem.getTopic().name(), folderName, "Solution.java");
         Path directory = filePath.getParent();
-        Files.createDirectories(directory);
+        try {
+            Files.createDirectories(directory);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
 
-        Files.writeString(filePath, problem.getSolution());
+        try {
+            Files.writeString(filePath, problem.getSolution());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
 
-        System.out.println(filePath);
+        Path readmePath = directory.resolve("README.md");
+        String markdown = readmeGenerator.generate(problem);
+        try {
+            Files.writeString(readmePath, markdown);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 }
