@@ -11,7 +11,11 @@ import java.util.*;
  */
 public class ConsoleUI {
     private final Scanner sc = new Scanner(System.in);
-    private final FileService fileService = new FileService();
+    private final FileService fileService;
+
+    public ConsoleUI(FileService fileService){
+        this.fileService = fileService;
+    }
 
     public void start() throws IOException {
 

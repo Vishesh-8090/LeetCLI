@@ -17,7 +17,11 @@ import java.util.function.Function;
  */
 public class FileService {
 
-    public FileService(){}
+    private final ConfigService configService;
+
+    public FileService(ConfigService configService){
+        this.configService = configService;
+    }
 
     /**
      * Creates the Java solution file for the given problem.
@@ -28,7 +32,9 @@ public class FileService {
         String folderName =
                 problem.getNumber() + "_" + NameFormatter.toClassName(problem.getName());
 
-        Path filePath = Paths.get("LeetCode", problem.getTopic().toString(), folderName, "Solution.java");
+        String repoPath = configService.getRepositoryPath();
+
+        Path filePath = Paths.get(repoPath, problem.getTopic().name(), folderName, "Solution.java");
         Path directory = filePath.getParent();
         Files.createDirectories(directory);
 
